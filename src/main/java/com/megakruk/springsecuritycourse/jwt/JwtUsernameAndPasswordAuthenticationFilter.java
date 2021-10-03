@@ -2,6 +2,7 @@ package com.megakruk.springsecuritycourse.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,21 +18,12 @@ import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 
+@AllArgsConstructor
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
     private final Key key;
-
-    public JwtUsernameAndPasswordAuthenticationFilter(
-            AuthenticationManager authenticationManager,
-            JwtConfig jwtConfig,
-            Key key
-    ) {
-        this.authenticationManager = authenticationManager;
-        this.jwtConfig = jwtConfig;
-        this.key = key;
-    }
 
     @Override
     public Authentication attemptAuthentication(

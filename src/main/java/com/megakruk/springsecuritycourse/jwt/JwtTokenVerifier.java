@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,18 +23,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final Key key;
     private final JwtConfig jwtConfig;
-
-    public JwtTokenVerifier(
-            Key key,
-            JwtConfig jwtConfig
-    ) {
-        this.key = key;
-        this.jwtConfig = jwtConfig;
-    }
 
     @Override
     protected void doFilterInternal(

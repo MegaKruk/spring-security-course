@@ -1,11 +1,13 @@
 package com.megakruk.springsecuritycourse.auth;
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
 
+@AllArgsConstructor
 public class ApplicationUser implements UserDetails {
 
     private final String username;
@@ -15,24 +17,6 @@ public class ApplicationUser implements UserDetails {
     private final boolean isAccountNonLocked;
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
-
-    public ApplicationUser(
-            Set<? extends GrantedAuthority> grantedAuthorities,
-            String password,
-            String username,
-            boolean isAccountNonExpired,
-            boolean isAccountNonLocked,
-            boolean isCredentialsNonExpired,
-            boolean isEnabled
-    ) {
-        this.username = username;
-        this.password = password;
-        this.grantedAuthorities = grantedAuthorities;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
