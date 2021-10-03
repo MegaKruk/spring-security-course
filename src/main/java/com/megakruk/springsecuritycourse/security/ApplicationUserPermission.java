@@ -1,8 +1,10 @@
 package com.megakruk.springsecuritycourse.security;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum ApplicationUserPermission {
     STUDENT_READ("student:read"),
     STUDENT_WRITE("student:write"),
@@ -10,8 +12,4 @@ public enum ApplicationUserPermission {
     COURSE_WRITE("course:write");
 
     private final String permission;
-
-    ApplicationUserPermission(String permission) {
-        this.permission = permission;
-    }
 }

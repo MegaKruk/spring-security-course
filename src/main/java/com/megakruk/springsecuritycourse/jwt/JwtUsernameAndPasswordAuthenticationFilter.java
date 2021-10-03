@@ -2,7 +2,6 @@ package com.megakruk.springsecuritycourse.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,15 +13,24 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtConfig jwtConfig;
+    private final Key key;
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtUsernameAndPasswordAuthenticationFilter(
+            AuthenticationManager authenticationManager,
+            JwtConfig jwtConfig,
+            Key key
+    ) {
         this.authenticationManager = authenticationManager;
+        this.jwtConfig = jwtConfig;
+        this.key = key;
     }
 
     @Override
@@ -30,6 +38,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             HttpServletRequest request,
             HttpServletResponse response
     ) throws AuthenticationException {
+
         try {
             UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
                     .readValue(
@@ -48,6 +57,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -57,14 +67,18 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             FilterChain chain,
             Authentication authResult
     ) throws IOException, ServletException {
-        String key = "rtyhwue5h7e9ha78gewgh0e9sdfsdgrtye57y5yedrgdrt55yr56y5rthdtr6y66yudfe5y5ye5";
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(4)))
-                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now()
+                        .plusDays(jwtConfig.getTokenExpirationAfterDays())))
+                .signWith(key)
                 .compact();
-        response.addHeader("Authorization", "Bearer " + token);
+
+        response.addHeader(
+                jwtConfig.getAuthorizationHeader(),
+                jwtConfig.getTokenPrefix() + token
+        );
     }
 }
