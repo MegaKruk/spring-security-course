@@ -7,6 +7,7 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
