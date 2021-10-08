@@ -10,7 +10,12 @@ import static javax.persistence.GenerationType.*;
 @Getter
 @Setter
 @ToString
-@Table(name = "student")
+@Table(
+        name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_email_unique", columnNames = "email")
+        }
+)
 @Entity(name = "Student")
 public class Student {
 
@@ -29,12 +34,14 @@ public class Student {
             updatable = false
     )
     private Long id;
+
     @Column(
             name = "first_name",
             nullable = false,
             columnDefinition = "TEXT"
     )
     private String firstName;
+
     @Column(
             name = "last_name",
             nullable = false,
@@ -42,8 +49,17 @@ public class Student {
     )
     private String lastName;
 
-    public Student(String firstName, String lastName) {
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT",
+            unique = true
+    )
+    private String email;
+
+    public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
     }
 }

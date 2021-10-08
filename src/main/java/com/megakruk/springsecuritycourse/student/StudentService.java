@@ -1,5 +1,6 @@
 package com.megakruk.springsecuritycourse.student;
 
+import com.megakruk.springsecuritycourse.exception.BadRequestException;
 import com.megakruk.springsecuritycourse.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
+        Boolean existsEmail = studentRepo.selectExistsByEmail(student.getEmail());
+        if(existsEmail)
+            throw new BadRequestException("Email " + student.getEmail() + " is taken!");
         return studentRepo.save(student);
     }
 
@@ -33,6 +37,7 @@ public class StudentService {
                         new UserNotFoundException("Student with id " + id + " was not found"));
         studentToBeUpdated.setFirstName(student.getFirstName());
         studentToBeUpdated.setLastName(student.getLastName());
+        studentToBeUpdated.setEmail(student.getEmail());
     }
 
     public Student findStudentById(Long id) {
