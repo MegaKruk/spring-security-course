@@ -10,6 +10,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,13 +81,66 @@ class StudentServiceTest {
     }
 
     @Test
-    @Disabled
-    void updateStudent() {
+    void canFindStudentById() {
+        //given
+        long id = 1;
+        Student student = new Student(
+                1L,
+                "Mark",
+                "Hamill",
+                "mhamill@gmail.com"
+        );
+        given(studentRepo.findStudentById(id)).willReturn(java.util.Optional.of(student));
+
+        //when
+        underTest.findStudentById(id);
+
+        //then
+        verify(studentRepo).findStudentById(id);
     }
 
     @Test
-    @Disabled
-    void findStudentById() {
+    void ShouldThrowWhenFindStudentById() {
+        //given
+        long id = 1;
+
+        given(studentRepo.findStudentById(id)).willReturn(Optional.empty());
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> underTest.findStudentById(id))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("not found");
+    }
+
+        @Test
+    void canUpdateStudent() {
+        //given
+        long id = 1;
+        Student student = new Student(
+                id,
+                "Jim",
+                "Bauman",
+                "jimmy@gmail.com"
+        );
+        given(studentRepo.findStudentById(id)).willReturn(java.util.Optional.of(student));
+
+        //when
+        Student updatedStudent = new Student(
+                "Mark",
+                "Hamill",
+                "mhamill@gmail.com"
+        );
+        underTest.updateStudent(id, updatedStudent);
+
+        //then
+        assertThat(studentRepo.findStudentById(id).orElseThrow().getFirstName())
+                .isEqualTo(updatedStudent.getFirstName());
+        assertThat(studentRepo.findStudentById(id).orElseThrow().getLastName())
+                .isEqualTo(updatedStudent.getLastName());
+        assertThat(studentRepo.findStudentById(id).orElseThrow().getEmail())
+                .isEqualTo(updatedStudent.getEmail());
     }
 
     @Test

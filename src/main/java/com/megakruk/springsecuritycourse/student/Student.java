@@ -63,4 +63,10 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
     }
+
+    public void setAllAttributes(Student student) {
+        this.setFirstName(student.getFirstName());
+        this.setLastName(student.getLastName());
+        this.setEmail(student.getEmail());
+    }
 }

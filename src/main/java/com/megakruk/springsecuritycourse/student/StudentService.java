@@ -19,7 +19,7 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
-        Boolean existsEmail = studentRepo.selectExistsByEmail(student.getEmail());
+        boolean existsEmail = studentRepo.selectExistsByEmail(student.getEmail());
         if(existsEmail)
             throw new BadRequestException("Email " + student.getEmail() + " is taken!");
         return studentRepo.save(student);
@@ -31,13 +31,8 @@ public class StudentService {
 
     @Transactional
     public void updateStudent(Long id, Student student) {
-        Student studentToBeUpdated = studentRepo
-                .findStudentById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException("Student with id " + id + " was not found"));
-        studentToBeUpdated.setFirstName(student.getFirstName());
-        studentToBeUpdated.setLastName(student.getLastName());
-        studentToBeUpdated.setEmail(student.getEmail());
+        Student studentToBeUpdated = findStudentById(id);
+        studentToBeUpdated.setAllAttributes(student);
     }
 
     public Student findStudentById(Long id) {
