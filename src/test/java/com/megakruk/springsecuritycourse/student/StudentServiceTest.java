@@ -3,7 +3,6 @@ package com.megakruk.springsecuritycourse.student;
 import com.megakruk.springsecuritycourse.exception.BadRequestException;
 import com.megakruk.springsecuritycourse.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

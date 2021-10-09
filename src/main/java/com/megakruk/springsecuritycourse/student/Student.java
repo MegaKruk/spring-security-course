@@ -10,7 +10,6 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Table(
         name = "student",
         uniqueConstraints = {
