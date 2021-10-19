@@ -1,5 +1,6 @@
 package com.megakruk.springsecuritycourse.student;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public class StudentManagementController {
         this.studentService = studentService;
     }
 
+    @ApiOperation(
+            value = "Retrieves all students",
+            notes = "A list of students",
+            response = Student.class,
+            produces = "application/json"
+    )
     @GetMapping(path = "/all")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMININTERN')")
     public ResponseEntity<List<Student>> getAllStudents() {
@@ -27,6 +34,12 @@ public class StudentManagementController {
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
+    @ApiOperation(
+            value = "Retrieves a student",
+            notes = "A student",
+            response = Student.class,
+            produces = "application/json"
+    )
     @GetMapping(path = "{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMININTERN')")
     public ResponseEntity<Student> getStudent(@PathVariable("id") Long id) {
@@ -34,6 +47,12 @@ public class StudentManagementController {
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
+    @ApiOperation(
+            value = "Adds a student",
+            notes = "Student registration",
+            response = Student.class,
+            produces = "application/json"
+    )
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<Student> addStudent(@RequestBody Student student) {
@@ -41,6 +60,12 @@ public class StudentManagementController {
         return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
     }
 
+    @ApiOperation(
+            value = "Updates student info",
+            notes = "Student update operation",
+            response = Student.class,
+            produces = "application/json"
+    )
     @PutMapping("{id}")
     @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<Student> updateStudent(
@@ -51,6 +76,11 @@ public class StudentManagementController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(
+            value = "Deletes a student from repository",
+            notes = "Student delete operation",
+            response = Student.class
+    )
     @DeleteMapping("{id}")
     @PreAuthorize("hasAuthority('student:write')")
     @Transactional
