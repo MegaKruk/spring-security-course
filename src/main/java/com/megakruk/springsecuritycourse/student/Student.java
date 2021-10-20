@@ -3,6 +3,7 @@ package com.megakruk.springsecuritycourse.student;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 import static javax.persistence.GenerationType.*;
 
@@ -40,6 +41,7 @@ public class Student {
             nullable = false,
             columnDefinition = "TEXT"
     )
+    @Size(min = 2, max = 50)
     private String firstName;
 
     @Column(
@@ -47,6 +49,7 @@ public class Student {
             nullable = false,
             columnDefinition = "TEXT"
     )
+    @Size(min = 2, max = 50)
     private String lastName;
 
     @Column(
@@ -55,6 +58,7 @@ public class Student {
             columnDefinition = "TEXT",
             unique = true
     )
+    @Size(min = 5, max = 50)
     private String email;
 
     public Student(String firstName, String lastName, String email) {

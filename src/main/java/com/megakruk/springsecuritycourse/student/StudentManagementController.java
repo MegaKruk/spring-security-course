@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -55,7 +56,7 @@ public class StudentManagementController {
     )
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('student:write')")
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student) {
         Student newStudent = studentService.addStudent(student);
         return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
     }
@@ -70,7 +71,7 @@ public class StudentManagementController {
     @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<Student> updateStudent(
             @PathVariable("id") Long id,
-            @RequestBody Student student
+            @Valid @RequestBody Student student
     ) {
         studentService.updateStudent(id, student);
         return new ResponseEntity<>(HttpStatus.OK);
