@@ -1,14 +1,14 @@
 package com.megakruk.springsecuritycourse.student;
 
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-import java.io.File;
-
-import static javax.persistence.GenerationType.*;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @NoArgsConstructor
 @AllArgsConstructor
