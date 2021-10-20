@@ -1,9 +1,12 @@
 package com.megakruk.springsecuritycourse.student;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+
+import java.io.File;
 
 import static javax.persistence.GenerationType.*;
 

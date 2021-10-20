@@ -2,20 +2,32 @@ package com.megakruk.springsecuritycourse.student;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("management/api/v1/students")
 public class StudentManagementController {
 
     private final StudentService studentService;
+    @Value("${uploadDir}")
+    private String UPLOAD_DIR;
 
     @Autowired
     public StudentManagementController(StudentService studentService) {
@@ -88,5 +100,32 @@ public class StudentManagementController {
     public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
         studentService.deleteStudent(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("{id}/upload")
+    @PreAuthorize("hasAuthority('student:write')")
+    public boolean upload(
+            @PathVariable("id") Long id,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        String directory = UPLOAD_DIR + id + "/";
+        File newFile = new File(directory + file.getOriginalFilename());
+        if (!newFile.exists())
+            newFile.mkdirs();
+        file.transferTo(newFile);
+        return true;
+    }
+
+    @GetMapping("{id}/download/{fileName}")
+    public ResponseEntity<byte[]> download(
+            @PathVariable("id") Long id,
+            @PathVariable("fileName") String fileName
+    ) throws IOException {
+        String directory = UPLOAD_DIR + id + "/";
+        Path path = new File(directory + fileName).toPath();
+        byte[] fileData = Files.readAllBytes(path);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(IMAGE_JPEG);
+        return new ResponseEntity<>(fileData, headers, HttpStatus.OK);
     }
 }
